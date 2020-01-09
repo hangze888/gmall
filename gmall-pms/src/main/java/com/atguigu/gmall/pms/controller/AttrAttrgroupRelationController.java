@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,6 +34,12 @@ public class AttrAttrgroupRelationController {
     @Autowired
     private AttrAttrgroupRelationService attrAttrgroupRelationService;
 
+    //删除关联关系
+    @PostMapping("delete/attr")
+    public Resp<String> deleteAttr(@RequestBody List<AttrAttrgroupRelationEntity> relationEntities){
+        attrAttrgroupRelationService.deleteAttr(relationEntities);
+        return Resp.ok("删除成功");
+    }
     /**
      * 列表
      */
@@ -59,7 +66,7 @@ public class AttrAttrgroupRelationController {
     }
 
     /**
-     * 保存
+     * 保存规格参数
      */
     @ApiOperation("保存")
     @PostMapping("/save")

@@ -1,12 +1,14 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.vo.GroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,26 @@ public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
 
+    @GetMapping("withattrs/cat/{catId}")
+    public Resp<List<GroupVo>> queryGroupVoByCid(@PathVariable("catId")Long cid){
+        List<GroupVo> groupVos = attrGroupService.queryGroupVOsByCid(cid);
+        return Resp.ok(groupVos);
+    }
+
+    //查询组及组的规格参数
+    @GetMapping("withattr/{Gid}")
+    public Resp<GroupVo> queryGroupVOByGid(@PathVariable("Gid") Long gid){
+        GroupVo groupVo = attrGroupService.queryGroupVOByGid(gid);
+
+        return Resp.ok(groupVo);
+    }
+    // 查询三级分类的分组
+    @GetMapping("{catId}")
+    public Resp<PageVo> queryGroupByCidPage(@PathVariable("catId") Long catId,QueryCondition queryCondition){
+        PageVo page = attrGroupService.queryGroupByCidPage(queryCondition,catId);
+
+        return Resp.ok(page);
+    }
     /**
      * 列表
      */
