@@ -1,0 +1,27 @@
+server:
+  port: 8092
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis:
+    host: 192.168.226.128
+  rabbitmq:
+    host: 192.168.226.128
+    virtual-host: /hangze
+    username: hangze
+    password: hangze
+jwt:
+  token:
+    pubKeyPath: H:\idea-workspace\rsa\rsa.pub
+    cookieName: gmall-token
+    userKey: user-key
+    expireTime: 7776000
+alipay:
+  app_id: 2016101500692513
+  notify_url: http://ol2syi668r.52http.net/api/order/pay/success # 域名是哲西云提供的域名，路径是订单支付成功回调的路径
+  return_url: http://localhost:2000/pay/success.html
+  sign_type: RSA2
+  charset: utf-8
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do

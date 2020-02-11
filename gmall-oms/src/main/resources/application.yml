@@ -1,0 +1,24 @@
+server:
+  port: 8084
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.226.128:3306/guli_oms
+    username: root
+    password: 1234
+  redis:
+    host: 192.168.226.128
+  rabbitmq:
+    host: 192.168.226.128
+    virtual-host: /hangze
+    username: hangze
+    password: hangze
+mybatis-plus:
+  mapper-locations: classpath:mapper/oms/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto

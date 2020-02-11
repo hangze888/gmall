@@ -1,1 +1,6 @@
-
+spring:
+  rabbitmq:
+    host: 192.168.226.128
+    virtual-host: /hangze
+    username: hangze
+    password: hangze

@@ -1,0 +1,14 @@
+server:
+  port: 8089
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+jwt:
+  token:
+    pubKeyPath: H:\idea-workspace\rsa\rsa.pub
+    priKeyPath: H:\idea-workspace\rsa\rsa.pri
+    secret: skdfll234235lkjlkf*&%%sdfj
+    cookieName: gmall-token
+    expireTime: 30

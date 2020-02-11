@@ -2,8 +2,12 @@ package com.atguigu.gmall.pms.service.impl;
 
 import com.atguigu.gmall.pms.dao.AttrAttrgroupRelationDao;
 import com.atguigu.gmall.pms.dao.AttrDao;
+import com.atguigu.gmall.pms.dao.ProductAttrValueDao;
 import com.atguigu.gmall.pms.entity.AttrAttrgroupRelationEntity;
 import com.atguigu.gmall.pms.entity.AttrEntity;
+import com.atguigu.gmall.pms.entity.ProductAttrValueEntity;
+import com.atguigu.gmall.pms.service.ProductAttrValueService;
+import com.atguigu.gmall.pms.vo.BaseGroupVo;
 import com.atguigu.gmall.pms.vo.GroupVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,10 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
     private AttrAttrgroupRelationDao relationDao;
     @Autowired
     private AttrDao attrDao;
+    @Autowired
+    private ProductAttrValueDao productAttrValueDao;
+
+
     @Override
     public PageVo queryPage(QueryCondition params) {
         IPage<AttrGroupEntity> page = this.page(
@@ -86,4 +94,27 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 //        }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<BaseGroupVo> queryItemGroupVoByCidSpuId(Long cid, Long spuId) {
+        // 1.根据sku中的categoryId查询分组
+        List<AttrGroupEntity> attrGroupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", cid));
+        if(CollectionUtils.isEmpty(attrGroupEntities)){
+            return null;
+        }
+        List<BaseGroupVo> baseGroupVos = attrGroupEntities.stream().map(AttrGroupEntity -> {
+            BaseGroupVo baseGroupVo = new BaseGroupVo();
+            baseGroupVo.setId(AttrGroupEntity.getAttrGroupId());
+            baseGroupVo.setName(AttrGroupEntity.getAttrGroupName());
+            // 2.遍历组到中间表中查询每个组的规格参数id
+            List<AttrAttrgroupRelationEntity> relationEntities = relationDao.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", AttrGroupEntity.getAttrGroupId()));
+            if (!CollectionUtils.isEmpty(relationEntities)) {
+                List<Long> attrIds = relationEntities.stream().map(AttrAttrgroupRelationEntity::getAttrId).collect(Collectors.toList());
+                // 3.根据spuId和attrId查询规格参数名及值
+                List<ProductAttrValueEntity> attrValueEntities = productAttrValueDao.selectList(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId).in("attr_id", attrIds));
+                baseGroupVo.setAttrs(attrValueEntities);
+            }
+            return baseGroupVo;
+        }).collect(Collectors.toList());
+        return baseGroupVos;
+    }
 }

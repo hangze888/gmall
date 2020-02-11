@@ -8,3 +8,10 @@ spring:
   elasticsearch:
     rest:
       uris: http://192.168.226.128:9200
+  jackson:
+    default-property-inclusion: non_null
+  rabbitmq:
+    host: 192.168.226.128
+    username: hangze
+    password: hangze
+    virtual-host: /hangze

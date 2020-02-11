@@ -24,6 +24,22 @@ spring:
           uri: lb://ums-service
           predicates:
             - Path=/ums/**
+        - id: index-route
+          uri: lb://index-service
+          predicates:
+            - Path=/api/index/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+        - id: order-route
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+jwt:
+  token:
+    pubKeyPath: H:\idea-workspace\rsa\rsa.pub
+    cookieName: gmall-token
